@@ -1,0 +1,8 @@
+.vscode/ 
+.idea/
+.vs/
+obj/
+TutorialApp.Infrastructure/Migrations/
+TutorialApp.WebApi/appsettings.json
+TutorialApp.WebApi/appsettings.Development.json
+TutorialApp.WebApi/appsettings.Production.json
