@@ -27,7 +27,7 @@ public static class ExceptionMiddleware
                     {
                         Success = false,
                         StatusCode = context.Response.StatusCode,
-                        Message = "Internal Server Error"
+                        Message = "Internal Server Error" + contextFeature.Error
                     }.ToString());
                 }
             });
