@@ -4,8 +4,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>C:\Users\DELL\Downloads\TutorialApp</_PublishTargetUrl>
-    <History>False|2024-03-19T00:38:45.6844896Z;True|2024-03-19T05:56:54.9070764+05:30;True|2024-03-18T20:36:46.4231645+05:30;True|2024-03-18T20:30:16.2982671+05:30;True|2024-03-18T20:28:53.3990061+05:30;True|2024-03-18T19:52:26.0812645+05:30;True|2024-03-18T16:26:11.4570277+05:30;True|2024-03-18T16:17:05.6695454+05:30;True|2024-03-18T16:10:48.7460594+05:30;</History>
+    <History>True|2024-03-19T01:15:45.4043449Z;</History>
     <LastFailureDetails />
   </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DBConnection">
+      <Value>Server=sql.bsite.net\MSSQL2016%3bDatabase=tutorialapp_2024%3bUser Id=tutorialapp_2024%3bPassword=Prne6ak6%401%3bTrustServerCertificate=True%3bMultipleActiveResultSets=true%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
 </Project>

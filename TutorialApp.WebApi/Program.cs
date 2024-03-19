@@ -4,7 +4,6 @@ using Microsoft.OpenApi.Models;
 using TutorialApp.Business.Admin;
 using TutorialApp.Business.Application;
 using TutorialApp.Business.Common;
-using TutorialApp.Business.Common.Middleware;
 using TutorialApp.Business.Common.Middleware.Exception;
 using TutorialApp.Infrastructure;
 
