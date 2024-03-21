@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using TutorialApp.Business.Common.ViewModel;
+
 namespace TutorialApp.Business.Common.Middleware.Exception;
 
 public static class ExceptionMiddleware

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TutorialApp.Infrastructure.Models
+namespace TutorialApp.Infrastructure.Identity
 {
     public partial class LkpCountry
     {

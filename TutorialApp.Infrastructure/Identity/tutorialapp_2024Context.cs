@@ -1,21 +1,31 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TutorialApp.Infrastructure.Identity
 {
-    public partial class TutorialAppIdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public partial class tutorialapp_2024Context : DbContext
     {
-        public TutorialAppIdentityContext(DbContextOptions<TutorialAppIdentityContext> options) :
-            base(options) { }
+        public tutorialapp_2024Context()
+        {
+        }
 
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
-        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
-        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
-        
+        public tutorialapp_2024Context(DbContextOptions<tutorialapp_2024Context> options)
+            : base(options)
+        {
+        }
+
+       
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016;Database=tutorialapp_2024;User Id=tutorialapp_2024;Password=Prne6ak6@1;TrustServerCertificate=True;MultipleActiveResultSets=true;");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AspNetRole>(entity =>
@@ -97,6 +107,19 @@ namespace TutorialApp.Infrastructure.Identity
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserTokens)
                     .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<LkpCountry>(entity =>
+            {
+                entity.ToTable("LkpCountry");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ModifiedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             OnModelCreatingPartial(modelBuilder);

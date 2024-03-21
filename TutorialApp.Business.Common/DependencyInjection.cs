@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Nelibur.ObjectMapper;
+using TutorialApp.Business.Common.Authentication;
 using TutorialApp.Business.Common.Token;
 using TutorialApp.Business.Common.Lookup.CountryLookup;
 using TutorialApp.Business.Common.Middleware.Exception;
@@ -14,6 +15,7 @@ public static class DependencyInjection
         service.AddSingleton<ILogManager, LogManager>();
         service.AddTransient<ITokenService, TokenService>();
         service.AddScoped<ICountryService, CountryService>();
+        service.AddScoped<IAuthService, AuthService>();
         return service;
     }
     

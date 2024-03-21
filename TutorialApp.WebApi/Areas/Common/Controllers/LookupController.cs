@@ -5,29 +5,29 @@ using TutorialApp.Business.Common.Lookup.CountryLookup;
 namespace TutorialApp.WebApi.Areas.Common.Controllers;
 
 /// <summary>
-/// This Controller handles all the APIS related to Common Lookup Values
+///     This Controller handles all the APIS related to Common Lookup Values
 /// </summary>
 public class LookupController : BaseCommonController
 {
     private readonly ICountryService _countryService;
-    
+
     /// <summary>
-    /// This Controller handles all the APIS related to Common Lookup Values
+    ///     This Controller handles all the APIS related to Common Lookup Values
     /// </summary>
     public LookupController(ICountryService countryService)
     {
         _countryService = countryService;
     }
 
-    
+
     /// <summary>
-    /// This API will return you List Of Countries
+    ///     This API will return you List Of Countries
     /// </summary>
     /// <returns>
-    /// Countries DTO
-    /// ID
-    /// CountryName
-    /// CountryCode
+    ///     Countries DTO
+    ///     ID
+    ///     CountryName
+    ///     CountryCode
     /// </returns>
     [AllowAnonymous]
     [HttpGet]
