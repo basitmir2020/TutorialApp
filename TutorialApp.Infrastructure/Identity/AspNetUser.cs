@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TutorialApp.Infrastructure.Identity
+﻿namespace TutorialApp.Infrastructure.Identity
 {
     public partial class AspNetUser
     {
@@ -16,7 +13,7 @@ namespace TutorialApp.Infrastructure.Identity
         public string Id { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string? LastName { get; set; }
-        public int CountryId { get; set; }
+        public int? ExamTypeId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? UserName { get; set; }
@@ -33,11 +30,11 @@ namespace TutorialApp.Infrastructure.Identity
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        public string? CountryCode { get; set; }
 
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
-
         public virtual ICollection<AspNetRole> Roles { get; set; }
     }
 }

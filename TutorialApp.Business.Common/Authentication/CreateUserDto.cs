@@ -23,9 +23,8 @@ public class CreateUserDto
 
     [Required(ErrorMessage = "Please provide password!")]
     public string Password { get; set; } = null!;
-
-    [Range(1, int.MaxValue, ErrorMessage = "Please select valid Country!")]
-    public int CountryId { get; set; }
+    public string CountryCode { get; set; }
+    public int ExamTypeId { get; set; }
 
     [Required(ErrorMessage = "Please provide UserType!")]
     public string UserType { get; set; } = null!;

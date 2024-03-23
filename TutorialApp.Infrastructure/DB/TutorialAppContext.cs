@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TutorialApp.Infrastructure.Identity;
+using TutorialApp.Infrastructure.Models;
 using LkpCountry = TutorialApp.Infrastructure.Models.LkpCountry;
 
 namespace TutorialApp.Infrastructure.DB;
@@ -19,6 +20,7 @@ public partial class TutorialAppContext : DbContext
     public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
     public virtual DbSet<LkpCountry> LkpCountries { get; set; } = null!;
+    public virtual DbSet<LkpExamTypes> LkpExamTypes { get; set; } = null!;
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

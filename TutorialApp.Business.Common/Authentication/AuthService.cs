@@ -46,7 +46,8 @@ public class AuthService : IAuthService
             UserName = model.Email,
             Email = model.Email,
             PhoneNumber = model.PhoneNumber,
-            CountryId = model.CountryId,
+            CountryCode = model.CountryCode,
+            ExamTypeId = model.ExamTypeId,
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
             EmailConfirmed = true
@@ -111,8 +112,8 @@ public class AuthService : IAuthService
         }
 
         var roles = await _userManager.GetRolesAsync(user);
-        var roleList = roles.ToList(); // Convert IList<string> to List<string>
-        var token =  _tokenService.GetTokenWithRoles(user, roleList);
+        Console.WriteLine(roles);
+        var token =  _tokenService.GetTokenWithRoles(user, roles.FirstOrDefault());
 
         return new TokenResponseViewModel
         {

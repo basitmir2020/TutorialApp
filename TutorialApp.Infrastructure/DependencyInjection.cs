@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using TutorialApp.Infrastructure.DB;
 using TutorialApp.Infrastructure.Identity;
 
@@ -27,7 +30,9 @@ public static class DependencyInjection
             {
                 options.Password.RequiredLength = 8;
                 options.SignIn.RequireConfirmedEmail = false;
-            }).AddEntityFrameworkStores<TutorialAppIdentityContext>()
+            })
+            .AddRoles<ApplicationRole>()
+            .AddEntityFrameworkStores<TutorialAppIdentityContext>()
             .AddDefaultTokenProviders();
         return services;
     }

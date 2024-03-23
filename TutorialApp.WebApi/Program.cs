@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ using TutorialApp.Business.Application;
 using TutorialApp.Business.Common;
 using TutorialApp.Business.Common.Middleware.Exception;
 using TutorialApp.Infrastructure;
+using TutorialApp.WebApi.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 /*builder.Logging.ClearProviders();
@@ -37,12 +39,13 @@ builder.Services.AddAuthentication(options =>
 {
     context.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true
     };
     context.Events = new JwtBearerEvents
     {
@@ -56,48 +59,55 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-
-
-
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler =
         ReferenceHandler.IgnoreCycles;
 });
 
+builder.Services.AddControllers(
+    options => options.Filters.Add(new ValidateInputActionFilterAttribute())
+);
+
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var result = new CustomValidationFailedResult(context.ModelState);
+
+        // TODO: add `using System.Net.Mime;` to resolve MediaTypeNames
+        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+        result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+
+        return result;
+    };
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+builder.Services.AddSwaggerGen(option =>
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header
-    });
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        option.IncludeXmlComments(xmlPath);
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        option.SwaggerDoc("v1", new OpenApiInfo {
+            Title = "Tutorial App", Version = "v1"
+        });
+
+        option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer"
+        });
+
+        option.OperationFilter < AuthResponsesOperationFilter > ();
+    }
+);
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", configurePolicy =>
 {

@@ -17,12 +17,12 @@ public class CountryService : ICountryService
 
     public async Task<ResponseViewModelGeneric<List<CountryDto>>> GetCountriesAsync()
     {
-        /*var countries = await _tutorialAppContext.LkpCountries
+        var countries = await _tutorialAppContext.LkpCountries
             .Where(x => x.IsActive)
             .OrderBy(x => x.Sequence)
-            .ToListAsync();*/
+            .ToListAsync();
 
-        /*if (countries.Count > 0)
+        if (countries.Count > 0)
         {
             var countryDto = TinyMapper.Map<List<LkpCountry>, List<CountryDto>>(countries);
             return new ResponseViewModelGeneric<List<CountryDto>>(countryDto)
@@ -31,7 +31,7 @@ public class CountryService : ICountryService
                 Success = true,
                 Message = "List Of Countries"
             };
-        }*/
+        }
 
         return new ResponseViewModelGeneric<List<CountryDto>>
         {

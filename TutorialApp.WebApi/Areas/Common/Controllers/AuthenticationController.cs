@@ -11,6 +11,10 @@ public class AuthenticationController : BaseCommonController
 {
     private readonly IAuthService _authService;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="authService"></param>
     public AuthenticationController(IAuthService authService)
     {
         _authService = authService;

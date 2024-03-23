@@ -17,37 +17,33 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GetTokenWithRoles(ApplicationUser applicationUser, List<string> roleList)
+    public string GetTokenWithRoles(ApplicationUser applicationUser, string? role)
     {
-        var userRoles = string.Empty;
-        if (roleList is { Count: > 0 })
-            userRoles = string.Join(",", roleList);
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var secretKey = _configuration["Jwt:Key"];
-        var issuer = _configuration["Jwt:Issuer"];
-        var tryParse = TryParse(_configuration["Jwt:TokenValidity"], out var tokenValidity);
-
-        var claims = new List<Claim>
+        var issuer  = _configuration["Jwt:Issuer"];
+        var audience= _configuration["Jwt:Audience"];
+        var secretKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new("Id", applicationUser.Id),
-            new(JwtRegisteredClaimNames.Name, applicationUser.FirstName + " " + applicationUser.LastName),
-            new(JwtRegisteredClaimNames.Sub, applicationUser.Email),
-            new(JwtRegisteredClaimNames.Email, applicationUser.Email),
-            new("Roles", userRoles)
-        };
-
-        var tokenDescription = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(tryParse ? tokenValidity : 5),
+            Subject = new ClaimsIdentity(new []
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("Id", applicationUser.Id),
+                new Claim(JwtRegisteredClaimNames.Name, applicationUser.FirstName + " " + applicationUser.LastName),
+                new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Email),
+                new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
+                new Claim(ClaimTypes.Role, role),
+               
+            }),
+            Expires = DateTime.UtcNow.AddDays(5),
             Issuer = issuer,
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+            Audience = audience,
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey),
                 SecurityAlgorithms.HmacSha256Signature)
         };
+        
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        var token = tokenHandler.CreateToken(tokenDescription);
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return tokenHandler.WriteToken(token);
     }
 }

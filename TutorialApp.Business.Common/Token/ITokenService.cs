@@ -4,5 +4,5 @@ namespace TutorialApp.Business.Common.Token;
 
 public interface ITokenService
 {
-    string GetTokenWithRoles(ApplicationUser applicationUser, List<string> roleList);
+    string GetTokenWithRoles(ApplicationUser applicationUser, string? role);
 }
