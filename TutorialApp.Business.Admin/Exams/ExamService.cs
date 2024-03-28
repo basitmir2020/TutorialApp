@@ -35,6 +35,7 @@ public class ExamService : IExamService
             .ToListAsync(cancellationToken: token);
         var newExamTypes = new ExamType
         {
+            CountryId = model.CountryId,
             ExamType1 = model.ExamType,
             ExamSubType = model.ExamSubType,
             IsActive = true,
