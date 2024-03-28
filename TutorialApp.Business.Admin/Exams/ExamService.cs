@@ -1,5 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TutorialApp.Business.Common.ViewModel;
 using TutorialApp.Infrastructure.DB;
 using TutorialApp.Infrastructure.Models;
@@ -9,14 +8,18 @@ namespace TutorialApp.Business.Admin.Exams;
 public class ExamService : IExamService
 {
     private readonly TutorialAppContext _tutorialAppContext;
+
     public ExamService(TutorialAppContext tutorialAppContext)
     {
         _tutorialAppContext = tutorialAppContext;
     }
-    public async Task<ResponseViewModel> SaveExamTypeAsync(ExamTypeDto model,string userId,CancellationToken token)
+
+    public async Task<ResponseViewModel> SaveExamTypeAsync(ExamTypeDto model, string userId, CancellationToken token)
     {
-        var examTypes = await _tutorialAppContext.LkpExamTypes
-            .FirstOrDefaultAsync(x => x.ExamType == model.ExamType && x.IsActive == true, cancellationToken: token);
+        var examTypes = await _tutorialAppContext.ExamTypes
+            .FirstOrDefaultAsync(x => x.ExamType1 == model.ExamType &&
+                                      x.CountryId == model.CountryId &&
+                                      x.IsActive == true, cancellationToken: token);
         if (examTypes != null)
         {
             return new ResponseViewModel
@@ -28,14 +31,14 @@ public class ExamService : IExamService
         }
 
         var examTypesCount = await _tutorialAppContext
-            .LkpExamTypes
+            .ExamTypes
             .ToListAsync(cancellationToken: token);
-        var newExamTypes = new LkpExamTypes
+        var newExamTypes = new ExamType
         {
-            ExamType = model.ExamType,
-            ExamTypeIcon = model.ExamTypeIcon,
+            ExamType1 = model.ExamType,
+            ExamSubType = model.ExamSubType,
             IsActive = true,
-            Status = "Pending",
+            StatusId = 1,
             Sequence = examTypesCount.Count + 1,
             CreatedOn = DateTime.Now,
             ModifiedOn = DateTime.Now,
@@ -50,6 +53,155 @@ public class ExamService : IExamService
             StatusCode = 200,
             Message = "Exam Type Saved Successfully!",
             Success = true
+        };
+    }
+
+    public async Task<ResponseViewModelGeneric<List<GetAllExamTypes>>>
+        GetAllExamTypesAsync(string userId, CancellationToken token)
+    {
+        var existExamTypes = await (from examType in _tutorialAppContext.ExamTypes
+                join status in _tutorialAppContext.LkpStatuses on examType.StatusId equals status.Id
+                join country in _tutorialAppContext.LkpCountries on examType.CountryId equals country.Id
+                where examType.IsActive == true
+                select new GetAllExamTypes
+                {
+                    Id = examType.Id,
+                    Sequence = examType.Sequence,
+                    CountryName = country.CountryName,
+                    ExamType = examType.ExamType1,
+                    ExamSubType = examType.ExamSubType,
+                    Status = status.StatusName
+                }).OrderByDescending(x => x.Sequence)
+            .ToListAsync(token);
+        if (existExamTypes.Count <= 0)
+        {
+            return new ResponseViewModelGeneric<List<GetAllExamTypes>>
+            {
+                StatusCode = 500,
+                Success = false,
+                Message = "No Exam Types Found!",
+            };
+        }
+
+        return new ResponseViewModelGeneric<List<GetAllExamTypes>>(existExamTypes)
+        {
+            StatusCode = 200,
+            Success = true,
+            Message = "Exam Types Found!",
+        };
+    }
+
+    public async Task<ResponseViewModelGeneric<GetExamType>> GetExamTypeByIdAsync(string userId, int examTypeId, CancellationToken token)
+    {
+        var existExamType = await _tutorialAppContext.ExamTypes
+            .FirstOrDefaultAsync(x => x.Id == examTypeId,token);
+        if (existExamType == null)
+        {
+            return new ResponseViewModelGeneric<GetExamType>
+            {
+                StatusCode = 500,
+                Success = false,
+                Message = "Exam Type Not Found!",
+            };
+        }
+
+        var response = new GetExamType
+        {
+            Id = existExamType.Id,
+            CountryId = existExamType.CountryId,
+            ExamType = existExamType.ExamType1,
+            ExamSubType = existExamType.ExamSubType
+        };
+
+        return new ResponseViewModelGeneric<GetExamType>(response)
+        {
+            StatusCode = 200,
+            Success = true,
+            Message = "Exam Type Data!"
+        };
+    }
+
+    public async Task<ResponseViewModel> UpdateExamType(string userId, GetExamType model, CancellationToken token)
+    {
+        var existExamType = await _tutorialAppContext.ExamTypes
+            .FirstOrDefaultAsync(x => x.Id == model.Id,token);
+        if (existExamType == null)
+        {
+            return new ResponseViewModel
+            {
+                StatusCode = 500,
+                Success = false,
+                Message = "Exam Type Not Found",
+            };
+        }
+
+        existExamType.CountryId = model.CountryId;
+        existExamType.ExamType1 = model.ExamType;
+        existExamType.ExamSubType = model.ExamSubType;
+        existExamType.ModifiedOn = DateTime.Now;
+        existExamType.ModifiedBy = userId;
+        _tutorialAppContext.Update(existExamType);
+        await _tutorialAppContext.SaveChangesAsync(token);
+
+        return new ResponseViewModel
+        {
+            StatusCode = 200,
+            Success = true,
+            Message = "ExamType Updated Successfully!"
+        };
+    }
+
+    public async Task<ResponseViewModel> ChangeStatusAsync(string userId, ChangeStatus model, CancellationToken token)
+    {
+        var existExamType = await _tutorialAppContext.ExamTypes
+            .FirstOrDefaultAsync(x => x.Id == model.ExamTypeId,token);
+        if (existExamType == null)
+        {
+            return new ResponseViewModel
+            {
+                StatusCode = 500,
+                Success = false,
+                Message = "Exam Type Not Found!",
+            };
+        }
+
+        existExamType.StatusId = model.StatusId;
+        existExamType.ModifiedOn = DateTime.Now;
+        existExamType.ModifiedBy = userId;
+        _tutorialAppContext.Update(existExamType);
+        await _tutorialAppContext.SaveChangesAsync(token);
+        return new ResponseViewModel
+        {
+            StatusCode = 200,
+            Success = true,
+            Message = "Status Changed Successfully!",
+        };
+    }
+
+    public async Task<ResponseViewModel> DeleteExamTypeAsync(string userId, DeleteExamType model, CancellationToken token)
+    {
+        var existExamType = await _tutorialAppContext.ExamTypes
+            .FirstOrDefaultAsync(x => x.Id == model.ExamTypeId,token);
+        if (existExamType == null)
+        {
+            return new ResponseViewModel
+            {
+                StatusCode = 500,
+                Success = false,
+                Message = "Exam Type Not Found!",
+            };
+        }
+
+        existExamType.IsActive =false;
+        existExamType.ModifiedOn = DateTime.Now;
+        existExamType.ModifiedBy = userId;
+        _tutorialAppContext.Update(existExamType);
+        await _tutorialAppContext.SaveChangesAsync(token);
+        return new ResponseViewModel
+        {
+            StatusCode = 200,
+            Success = true,
+            Message = "Exam Type deleted successfully!",
         };
     }
 }
