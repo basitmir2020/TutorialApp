@@ -43,12 +43,16 @@ public class ExamController : ControllerBase
     /// Get List of Exam Types
     /// </summary>
     /// <param name="token"></param>
+    /// <param name="filter"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="pageNumber"></param>
+    /// <param name="pageSize"></param>
     /// <returns></returns>
     [HttpGet("GetExamTypes")]
-    public async Task<IActionResult> GetExamTypes(CancellationToken token)
+    public async Task<IActionResult> GetExamTypes(CancellationToken token,string? filter = null, string? orderBy = "Sequence", int? pageNumber = 1, int? pageSize = 10)
     {
         var userId = User.FindFirstValue("Id");
-        var response = await _examService.GetAllExamTypesAsync(userId,token);
+        var response = await _examService.GetAllExamTypesAsync(userId,token,filter,orderBy,pageNumber,pageSize);
         return Ok(response);
     }
 

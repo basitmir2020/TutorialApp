@@ -58,23 +58,23 @@ public class ExamService : IExamService
     }
 
     public async Task<ResponseViewModelGeneric<List<GetAllExamTypes>>>
-        GetAllExamTypesAsync(string userId, CancellationToken token)
+        GetAllExamTypesAsync(string userId,CancellationToken token,string? filter = null, string? orderBy = "Sequence", int? pageNumber = 1, int? pageSize = 10)
     {
-        var existExamTypes = await (from examType in _tutorialAppContext.ExamTypes
-                join status in _tutorialAppContext.LkpStatuses on examType.StatusId equals status.Id
-                join country in _tutorialAppContext.LkpCountries on examType.CountryId equals country.Id
-                where examType.IsActive == true
-                select new GetAllExamTypes
-                {
-                    Id = examType.Id,
-                    Sequence = examType.Sequence,
-                    CountryName = country.CountryName,
-                    ExamType = examType.ExamType1,
-                    ExamSubType = examType.ExamSubType,
-                    Status = status.StatusName
-                }).OrderByDescending(x => x.Sequence)
-            .ToListAsync(token);
-        if (existExamTypes.Count <= 0)
+        var query = from examType in _tutorialAppContext.ExamTypes
+            join status in _tutorialAppContext.LkpStatuses on examType.StatusId equals status.Id
+            join country in _tutorialAppContext.LkpCountries on examType.CountryId equals country.Id
+            where examType.IsActive
+            select new GetAllExamTypes
+            {
+                Id = examType.Id,
+                Sequence = examType.Sequence,
+                CountryName = country.CountryName,
+                ExamType = examType.ExamType1,
+                ExamSubType = examType.ExamSubType,
+                Status = status.StatusName
+            };
+        
+        if (!query.Any())
         {
             return new ResponseViewModelGeneric<List<GetAllExamTypes>>
             {
@@ -83,11 +83,39 @@ public class ExamService : IExamService
                 Message = "No Exam Types Found!",
             };
         }
+        
+        // Apply filtering
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            query = query.Where(exam => 
+                exam.ExamType.Contains(filter) || // Add more filter conditions as needed
+                exam.ExamSubType.Contains(filter) ||
+                exam.CountryName.Contains(filter) ||
+                exam.Status.Contains(filter)
+            );
+        }
+        
+        // Apply sorting
+        if (!string.IsNullOrWhiteSpace(orderBy))
+        {
+            query = orderBy switch
+            {
+                "Sequence" => query.OrderByDescending(exam => exam.Sequence),
+                _ => query
+            };
+        }
+        
+        // Apply pagination
+        var totalItems = await query.CountAsync(token);
+        var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize!);
+        var pagedData = await query.Skip((int)((pageNumber - 1) * pageSize)!).Take((int)pageSize).ToListAsync(token);
 
-        return new ResponseViewModelGeneric<List<GetAllExamTypes>>(existExamTypes)
+        return new ResponseViewModelGeneric<List<GetAllExamTypes>>(pagedData)
         {
             StatusCode = 200,
             Success = true,
+            TotalItems = totalItems,
+            TotalPages = totalPages,
             Message = "Exam Types Found!",
         };
     }

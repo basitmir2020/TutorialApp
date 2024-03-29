@@ -14,5 +14,7 @@ public class ResponseViewModelGeneric<T>
     public int StatusCode { get; set; }
     public bool Success { get; set; }
     public string Message { get; set; } = null!;
+    public int? TotalItems { get; set; }
+    public int? TotalPages { get; set; }
     public T? Data { get; set; }
 }
