@@ -25,8 +25,8 @@ public class ExamTypeController : ControllerBase
     }
 
     /// <summary>
-    /// Send UserExamType Id
-    /// It will save the Exam Type
+    /// Send Exam Type Id
+    /// It will save the User Exam Type
     /// </summary>
     /// <param name="model"></param>
     /// <param name="token"></param>
