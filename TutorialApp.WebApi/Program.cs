@@ -8,9 +8,8 @@ using Microsoft.OpenApi.Models;
 using TutorialApp.Business.Admin;
 using TutorialApp.Business.Application;
 using TutorialApp.Business.Common;
-using TutorialApp.Business.Common.Middleware.Exception;
 using TutorialApp.Infrastructure;
-using TutorialApp.WebApi.Validators;
+using TutorialApp.WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 /*builder.Logging.ClearProviders();
@@ -118,8 +117,8 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", configurePol
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogManager>();
-app.ConfigureExceptionMiddleware(logger);
+/*var logger = app.Services.GetRequiredService<ILogManager>();
+app.ConfigureExceptionMiddleware(logger);*/
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();

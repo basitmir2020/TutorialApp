@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TutorialApp.Infrastructure.Identity
+﻿namespace TutorialApp.Infrastructure.Identity
 {
     public partial class AspNetRole
     {

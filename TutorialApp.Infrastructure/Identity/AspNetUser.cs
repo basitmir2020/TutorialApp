@@ -1,4 +1,6 @@
-﻿namespace TutorialApp.Infrastructure.Identity
+﻿using TutorialApp.Infrastructure.Models;
+
+namespace TutorialApp.Infrastructure.Identity
 {
     public partial class AspNetUser
     {
@@ -7,6 +9,7 @@
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetUserTokens = new HashSet<AspNetUserToken>();
+            UserExamTypes = new HashSet<UserExamType>();
             Roles = new HashSet<AspNetRole>();
         }
 
@@ -35,6 +38,8 @@
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
+        public virtual ICollection<UserExamType> UserExamTypes { get; set; }
+
         public virtual ICollection<AspNetRole> Roles { get; set; }
     }
 }

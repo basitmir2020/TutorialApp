@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TutorialApp.Business.Common.ViewModel;
 using TutorialApp.Infrastructure.DB;
 using TutorialApp.Infrastructure.Identity;
@@ -25,7 +26,7 @@ public class UserService : IUserService
         var existUser = await _userManager.FindByIdAsync(userId);
         if (existUser == null)
         {
-            return new ResponseViewModelGeneric<UserDto>()
+            return new ResponseViewModelGeneric<UserDto>
             {
                 StatusCode = 400,
                 Success = false,
@@ -40,7 +41,11 @@ public class UserService : IUserService
             UserName = existUser.FirstName + " " + existUser.LastName,
             Email = existUser.Email,
             PhoneNumber = existUser.PhoneNumber,
-            Role = roles.First()
+            Role = roles.First(),
+            Country = await _tutorialAppContext.LkpCountries
+                .Where(x=>x.CountryCode == existUser.CountryCode)
+                .Select(x=>x.CountryName + " (" + x.CountryInitial + ") " )
+                .FirstOrDefaultAsync(token)
         };
 
         return new ResponseViewModelGeneric<UserDto>(user)

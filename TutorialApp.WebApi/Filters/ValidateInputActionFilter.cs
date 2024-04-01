@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TutorialApp.Business.Common.Constants;
 
-namespace TutorialApp.WebApi.Validators
+namespace TutorialApp.WebApi.Filters
 {
     /// <summary>
     /// 
@@ -63,7 +63,7 @@ namespace TutorialApp.WebApi.Validators
         /// <summary>
         /// 
         /// </summary>
-        private List<ValidationError> Errors { get; } = null!;
+        public List<ValidationError> Errors { get; } = new List<ValidationError>();
 
         /// <summary>
         /// 
@@ -88,8 +88,6 @@ namespace TutorialApp.WebApi.Validators
                         }
                     }
             }
-
-
             modelState.Clear();
         }
     }

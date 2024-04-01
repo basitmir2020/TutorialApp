@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Nelibur.ObjectMapper;
 using TutorialApp.Business.Common.ViewModel;
 using TutorialApp.Infrastructure.DB;
+using TutorialApp.Infrastructure.Identity;
 using TutorialApp.Infrastructure.Models;
 
 namespace TutorialApp.Business.Common.Lookup.ExamTypeLookup;
@@ -9,19 +11,45 @@ namespace TutorialApp.Business.Common.Lookup.ExamTypeLookup;
 public class ExamTypeService : IExamTypeService
 {
     private readonly TutorialAppContext _tutorialAppContext;
-    public ExamTypeService(TutorialAppContext tutorialAppContext)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public ExamTypeService(
+        TutorialAppContext tutorialAppContext, 
+        UserManager<ApplicationUser> userManager)
     {
         _tutorialAppContext = tutorialAppContext;
+        _userManager = userManager;
     }
-    public async Task<ResponseViewModelGeneric<List<ExamTypeDto>>> GetAllExamTypeAsync(CancellationToken token)
+    public async Task<ResponseViewModelGeneric<List<ExamTypeDto>>> GetAllExamTypeAsync(CancellationToken token,string userId)
     {
-        var examTypes = await _tutorialAppContext.LkpExamTypes
-            .Where(x => x.IsActive == true && x.Status == "Activated")
-            .OrderBy(x => x.Sequence)
-            .ToListAsync(token);
-        if (examTypes.Count > 0)
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
         {
-            var response = TinyMapper.Map<List<LkpExamTypes>, List<ExamTypeDto>>(examTypes);
+            return new ResponseViewModelGeneric<List<ExamTypeDto>>
+            {
+                StatusCode = 400,
+                Success = false,
+                Message = "User Not Found"
+            };
+        }
+        
+        //Status 
+       //1 -> Pending
+       //2 -> Active
+
+       var response = await (from examTypes in _tutorialAppContext.ExamTypes
+           join aspNetUser in _tutorialAppContext.AspNetUsers on userId equals aspNetUser.Id
+           join country in _tutorialAppContext.LkpCountries on aspNetUser.CountryCode equals country.CountryCode
+           where examTypes.IsActive && examTypes.StatusId == 2
+           select new ExamTypeDto
+           {
+               Id = examTypes.Id,
+               ExamType = examTypes.ExamType1,
+               ExamSubType = examTypes.ExamSubType,
+               Sequence = examTypes.Sequence
+           }).OrderByDescending(x=>x.Sequence)
+           .ToListAsync(token);
+        if (response.Count > 0)
+        {
             return new ResponseViewModelGeneric<List<ExamTypeDto>>(response)
             {
                 StatusCode = 200,

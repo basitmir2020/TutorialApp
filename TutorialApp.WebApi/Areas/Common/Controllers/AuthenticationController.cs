@@ -57,10 +57,6 @@ public class AuthenticationController : BaseCommonController
     [HttpPost("LoginUser")]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDto model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
         var response = await _authService.LoginUserAsync(model);
         return Ok(response);
     }

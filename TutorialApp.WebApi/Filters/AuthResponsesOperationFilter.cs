@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace TutorialApp.WebApi.Validators;
+namespace TutorialApp.WebApi.Filters;
 
 /// <summary>
 /// 

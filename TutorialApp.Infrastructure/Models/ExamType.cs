@@ -8,6 +8,7 @@ namespace TutorialApp.Infrastructure.Models
         public ExamType()
         {
             ExamSubjects = new HashSet<ExamSubject>();
+            UserExamTypes = new HashSet<UserExamType>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace TutorialApp.Infrastructure.Models
         public virtual LkpCountry? Country { get; set; }
         public virtual LkpStatus? Status { get; set; }
         public virtual ICollection<ExamSubject> ExamSubjects { get; set; }
+        public virtual ICollection<UserExamType> UserExamTypes { get; set; }
     }
 }

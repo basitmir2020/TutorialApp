@@ -56,14 +56,14 @@ public class LookupController : BaseCommonController
     ///  This API will return you List Of Exam Types
     /// </summary>
     /// <returns></returns>
-    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Route("GetExamTypes")]
     public async Task<IActionResult> GetExamTypes(CancellationToken token)
     {
-        var response = await _examTypeService.GetAllExamTypeAsync(token);
+        var userId = User.FindFirstValue("Id");
+        var response = await _examTypeService.GetAllExamTypeAsync(token, userId);
         return Ok(response);
     }
     

@@ -12,6 +12,7 @@ namespace TutorialApp.Infrastructure.Models
         
         public int Id { get; set; }
         public string? CountryName { get; set; }
+        public string? CountryInitial { get; set; }
         public string? CountryCode { get; set; }
         public bool IsActive { get; set; }
         public string? Status { get; set; }
