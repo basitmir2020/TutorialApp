@@ -29,7 +29,12 @@ public static class DependencyInjection
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = 8;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
             })
             .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<TutorialAppIdentityContext>()

@@ -60,4 +60,30 @@ public class AuthenticationController : BaseCommonController
         var response = await _authService.LoginUserAsync(model);
         return Ok(response);
     }
+
+    /// <summary>
+    /// Send OTP to this API
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("VerifyEmail")]
+    public async Task<IActionResult> VerifyEmail([FromBody] OtpDto model)
+    {
+        var response = await _authService.VerifyOtpAsync(model);
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Send Email to this API
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("ResendOtp")]
+    public async Task<IActionResult> ResendOtp([FromBody] EmailDto model)
+    {
+        var response = await _authService.ResendOtpAsync(model);
+        return Ok(response);
+    }
 }

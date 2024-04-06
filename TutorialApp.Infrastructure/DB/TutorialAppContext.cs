@@ -19,6 +19,7 @@ public partial class TutorialAppContext : DbContext
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
     public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
+    public virtual DbSet<AspNetUserOtp> AspNetUserOtp { get; set; } = null!;
     public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
     public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;

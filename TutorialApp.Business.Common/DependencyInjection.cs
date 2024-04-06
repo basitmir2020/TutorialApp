@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Nelibur.ObjectMapper;
 using TutorialApp.Business.Common.Authentication;
+using TutorialApp.Business.Common.EmailSending;
 using TutorialApp.Business.Common.Token;
 using TutorialApp.Business.Common.Lookup.CountryLookup;
 using TutorialApp.Business.Common.Lookup.ExamTypeLookup;
@@ -20,6 +21,7 @@ public static class DependencyInjection
         service.AddScoped<IExamTypeService, ExamTypeService>();
         service.AddScoped<IAuthService, AuthService>();
         service.AddScoped<IUserService, UserService>();
+        service.AddScoped<IEmailService, EmailService>();
         return service;
     }
     

@@ -23,8 +23,8 @@ public class CreateUserDto
 
     [Required(ErrorMessage = "Please provide password!")]
     public string Password { get; set; } = null!;
-    public string CountryCode { get; set; }
-    public int ExamTypeId { get; set; }
+    [Required(ErrorMessage = "Please provide Country Code!")]
+    public string CountryCode { get; set; } = null!;
 
     [Required(ErrorMessage = "Please provide UserType!")]
     public string UserType { get; set; } = null!;
@@ -37,4 +37,16 @@ public class LoginUserDto
     public string Email { get; set; }
     [Required(ErrorMessage = "Please provide password!")]
     public string Password { get; set; }
+}
+
+public class OtpDto
+{
+    [Required(ErrorMessage = "Please provide otp!")]
+    public string Otp { get; set; } = null!;
+}
+
+public class EmailDto
+{
+    [Required(ErrorMessage = "Please provide Email!")]
+    public string Email { get; set; } = null!;
 }

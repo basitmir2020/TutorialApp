@@ -16,7 +16,6 @@ namespace TutorialApp.Infrastructure.Identity
         public string Id { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string? LastName { get; set; }
-        public int? ExamTypeId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? UserName { get; set; }

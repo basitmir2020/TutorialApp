@@ -7,7 +7,6 @@ public class ApplicationUser : IdentityUser
     public string FirstName { get; set; } = null!;
     public string? LastName { get; set; }
     public string? CountryCode { get; set; }
-    public int? ExamTypeId { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
 }
