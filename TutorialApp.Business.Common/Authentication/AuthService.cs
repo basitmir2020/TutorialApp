@@ -382,6 +382,11 @@ public class AuthService : IAuthService
                 Message = "Forgot Password otp not verified!"
             };
         }
+
+        existOtp.IsActive = false;
+        existOtp.ModifiedOn = DateTime.Now;
+        _tutorialAppContext.Update(existOtp);
+        await _tutorialAppContext.SaveChangesAsync();
         
         
         var token = await _userManager.GeneratePasswordResetTokenAsync(existUser);
