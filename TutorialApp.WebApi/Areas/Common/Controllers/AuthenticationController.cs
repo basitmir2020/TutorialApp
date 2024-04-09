@@ -70,7 +70,7 @@ public class AuthenticationController : BaseCommonController
     [HttpPost("VerifyEmail")]
     public async Task<IActionResult> VerifyEmail([FromBody] OtpDto model)
     {
-        var response = await _authService.VerifyOtpAsync(model);
+        var response = await _authService.VerifyEmailAsync(model);
         return Ok(response);
     }
 
@@ -84,6 +84,45 @@ public class AuthenticationController : BaseCommonController
     public async Task<IActionResult> ResendOtp([FromBody] EmailDto model)
     {
         var response = await _authService.ResendOtpAsync(model);
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("ForgotPassword")]
+    public async Task<IActionResult> ForgotPassword([FromBody] EmailDto model)
+    {
+        var response = await _authService.ForgotPasswordAsync(model);
+        return Ok(response);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("VerifyForgotPassword")]
+    public async Task<IActionResult> VerifyForgotPassword([FromBody] OtpDto model)
+    {
+        var response = await _authService.VerifyForgotPasswordAsync(model);
+        return Ok(response);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] PasswordDto model)
+    {
+        var response = await _authService.ResetPasswordAsync(model);
         return Ok(response);
     }
 }

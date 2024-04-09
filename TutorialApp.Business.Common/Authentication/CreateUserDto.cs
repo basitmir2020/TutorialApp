@@ -50,3 +50,12 @@ public class EmailDto
     [Required(ErrorMessage = "Please provide Email!")]
     public string Email { get; set; } = null!;
 }
+
+public class PasswordDto
+{
+    [Required(ErrorMessage = "Please provide email!")]
+    [EmailAddress(ErrorMessage = "Please provide valid email address!")]
+    public string Email { get; set; } = null!;
+    [Required(ErrorMessage = "Please provide password!")]
+    public string NewPassword { get; set; } = null!;
+}

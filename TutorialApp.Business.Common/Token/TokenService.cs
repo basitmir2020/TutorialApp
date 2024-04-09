@@ -50,12 +50,15 @@ public class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public async Task<string> GenerateOtpAsync(string userId)
+    public async Task<string> GenerateOtpAsync(string userId,int otpType)
     {
         var otp = GenerateRandomOtp();
         var userOtp = await _tutorialAppContext
             .AspNetUserOtp
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
+            .FirstOrDefaultAsync(x => 
+                x.UserId == userId && 
+                x.OtpType == otpType && 
+                x.IsActive == true);
         if (userOtp != null)
         {
             userOtp.IsActive = false;
@@ -68,6 +71,7 @@ public class TokenService : ITokenService
         {
             UserId = userId,
             Otp = otp,
+            OtpType = otpType,
             Expiry = DateTime.Now.AddDays(2),
             StatusId = 1,
             IsActive = true,

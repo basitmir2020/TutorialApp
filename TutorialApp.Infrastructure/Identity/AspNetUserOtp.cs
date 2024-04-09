@@ -5,6 +5,7 @@ public class AspNetUserOtp
     public int Id { get; set; }
     public string? UserId { get; set; }
     public string? Otp { get; set; }
+    public int? OtpType { get; set; }
     public DateTime Expiry { get; set; }
     public int StatusId { get; set; }
     public bool IsActive { get; set; }
