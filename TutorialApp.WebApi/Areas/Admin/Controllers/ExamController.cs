@@ -6,7 +6,7 @@ using TutorialApp.Business.Admin.Exams;
 namespace TutorialApp.WebApi.Areas.Admin.Controllers;
 
 /// <summary>
-/// This Controller Contains All The Apis Related to Exam
+/// This Controller Contains All The Apis Related to Exam Types
 /// </summary>
 [Authorize(Roles = "Admin")]
 [Area("Admin")]
@@ -80,7 +80,7 @@ public class ExamController : ControllerBase
     public async Task<IActionResult> UpdateExamType([FromBody] GetExamType model,CancellationToken token)
     {
         var userId = User.FindFirstValue("Id");
-        var response = await _examService.UpdateExamType(userId,model,token);
+        var response = await _examService.UpdateExamTypeAsync(userId,model,token);
         return Ok(response);
     }
     
@@ -107,6 +107,18 @@ public class ExamController : ControllerBase
     {
         var userId = User.FindFirstValue("Id");
         var response = await _examService.DeleteExamTypeAsync(userId,model,token);
+        return Ok(response);
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    [HttpGet("SelectExamTypes")]
+    public async Task<IActionResult> SelectExamTypes(CancellationToken token)
+    {
+        var response = await _examService.SelectExamTypeAsync(token);
         return Ok(response);
     }
 }

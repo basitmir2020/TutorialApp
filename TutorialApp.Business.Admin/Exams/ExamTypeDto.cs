@@ -44,3 +44,8 @@ public class GetExamType
     public string ExamSubType { get; set; } = null!;
 }
 
+public class ExamTypeVM
+{
+    public int Id { get; set; }
+    public string ExamType { get; set; } = null!;
+}

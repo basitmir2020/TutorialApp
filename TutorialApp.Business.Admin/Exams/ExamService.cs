@@ -150,7 +150,7 @@ public class ExamService : IExamService
         };
     }
 
-    public async Task<ResponseViewModel> UpdateExamType(string userId, GetExamType model, CancellationToken token)
+    public async Task<ResponseViewModel> UpdateExamTypeAsync(string userId, GetExamType model, CancellationToken token)
     {
         var existExamType = await _tutorialAppContext.ExamTypes
             .FirstOrDefaultAsync(x => x.Id == model.Id,token);
@@ -176,7 +176,7 @@ public class ExamService : IExamService
         {
             StatusCode = 200,
             Success = true,
-            Message = "ExamType Updated Successfully!"
+            Message = "Exam Type Updated Successfully!"
         };
     }
 
@@ -232,5 +232,23 @@ public class ExamService : IExamService
             Success = true,
             Message = "Exam Type deleted successfully!",
         };
+    }
+
+    public async Task<ResponseViewModelGeneric<List<ExamTypeVM>>> SelectExamTypeAsync(CancellationToken token)
+    {
+        var examTypes = await (from examType in _tutorialAppContext.ExamTypes
+            where examType.IsActive
+            select new ExamTypeVM
+            {
+                Id = examType.Id,
+                ExamType = examType.ExamType1
+            }).ToListAsync(cancellationToken: token);
+        return new ResponseViewModelGeneric<List<ExamTypeVM>>(examTypes)
+        {
+            Success = true,
+            StatusCode = 200,
+            Message = "Select Exam Types"
+        };
+
     }
 }
