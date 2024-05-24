@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TutorialApp.Business.Admin.Dashboard;
 using TutorialApp.Business.Admin.Exams;
 using TutorialApp.Business.Admin.ExamSubjects;
 
@@ -10,6 +11,7 @@ public static class DependencyInjection
     {
         service.AddScoped<IExamService, ExamService>();
         service.AddScoped<IExamSubjectsService, ExamSubjectsService>();
+        service.AddScoped<IDashboardService, DashboardService>();
         return service;
     }
 }
