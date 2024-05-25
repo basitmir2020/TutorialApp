@@ -4,5 +4,6 @@ public class DashboardDto
 {
     public int ExamTypeCount { get; set; }
     public int ExamSubjectCount { get; set; }
+    public int SubjectChaptersCount { get; set; }
     public int UserCount { get; set; }
 }

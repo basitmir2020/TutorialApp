@@ -58,7 +58,8 @@ public class ExamService : IExamService
     }
 
     public async Task<ResponseViewModelGeneric<List<GetAllExamTypes>>>
-        GetAllExamTypesAsync(string userId,CancellationToken token,string? filter = null, string? orderBy = "Sequence", int? pageNumber = 1, int? pageSize = 10)
+        GetAllExamTypesAsync(string userId,CancellationToken token,string? filter = null,
+            string? orderBy = "Sequence", int? pageNumber = 1, int? pageSize = 10)
     {
         var query = from examType in _tutorialAppContext.ExamTypes
             join status in _tutorialAppContext.LkpStatuses on examType.StatusId equals status.Id
@@ -249,6 +250,5 @@ public class ExamService : IExamService
             StatusCode = 200,
             Message = "Select Exam Types"
         };
-
     }
 }

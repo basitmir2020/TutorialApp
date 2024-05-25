@@ -17,16 +17,18 @@ public class DashboardService : IDashboardService
     {
         var response = new DashboardDto
         {
+            UserCount = await _tutorialAppContext.AspNetUsers
+                .Include(x => x.Roles)
+                .Where(x => x.Roles.Any(r => r.Name == "Applicant"))
+                .CountAsync(cancellationToken: token),
             ExamTypeCount = await _tutorialAppContext.ExamTypes
                 .CountAsync(x =>x.IsActive, 
                     cancellationToken: token),
             ExamSubjectCount = await _tutorialAppContext.ExamSubjects
                 .CountAsync(x=>x.IsActive,
                     cancellationToken: token),
-            UserCount = await _tutorialAppContext.AspNetUsers
-            .Include(x => x.Roles)
-            .Where(x => x.Roles.Any(r => r.Name == "Applicant"))
-            .CountAsync(cancellationToken: token)
+            SubjectChaptersCount = await _tutorialAppContext.SubjectChapters
+                .CountAsync(x=>x.IsActive,cancellationToken : token)
             
         };
 

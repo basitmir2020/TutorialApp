@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TutorialApp.Infrastructure.Models
+﻿namespace TutorialApp.Infrastructure.Models
 {
     public partial class SubjectChapter
     {
