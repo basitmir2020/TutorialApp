@@ -197,7 +197,7 @@ public class ExamSubjectsService : IExamSubjectsService
             where examSubjects.IsActive
             select new GetAllExamTypeSubjects
             {
-                Id = examType.Id,
+                Id = examSubjects.Id,
                 ExamType = examType.ExamType1,
                 SubjectsName =examSubjects.SubjectName,
                 Sequence = examSubjects.Sequence,
