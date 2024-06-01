@@ -190,14 +190,15 @@ public class ExamSubjectsService : IExamSubjectsService
          string userId,CancellationToken token,string? filter = null, 
          string? orderBy = "Sequence", int? pageNumber = 1, int? pageSize = 10)
     {
-        var query = from examSubjects in _tutorialAppContext.ExamSubjects
+        var query = from examSubjects in _tutorialAppContext
+                .ExamSubjects
             join status in _tutorialAppContext.LkpStatuses on examSubjects.StatusId equals status.Id
-            join examType in _tutorialAppContext.LkpExamTypes on examSubjects.ExamTypeId equals examType.Id
+            join examType in _tutorialAppContext.ExamTypes on examSubjects.ExamTypeId equals examType.Id
             where examSubjects.IsActive
             select new GetAllExamTypeSubjects
             {
                 Id = examType.Id,
-                ExamType = examType.ExamType,
+                ExamType = examType.ExamType1,
                 SubjectsName =examSubjects.SubjectName,
                 Sequence = examSubjects.Sequence,
                 Status = status.StatusName
@@ -236,7 +237,8 @@ public class ExamSubjectsService : IExamSubjectsService
         // Apply pagination
         var totalItems = await query.CountAsync(token);
         var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize!);
-        var pagedData = await query.Skip((int)((pageNumber - 1) * pageSize)!).Take((int)pageSize).ToListAsync(token);
+        var pagedData = 
+            await query.Skip((int)((pageNumber - 1) * pageSize)!).Take((int)pageSize).ToListAsync(token);
 
         return new ResponseViewModelGeneric<List<GetAllExamTypeSubjects>>(pagedData)
         {
