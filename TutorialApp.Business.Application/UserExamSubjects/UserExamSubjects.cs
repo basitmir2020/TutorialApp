@@ -83,6 +83,7 @@ public class UserExamSubjects : IUserExamSubjects
         {
             UserExamTypeId = examType.Id,
             UserSubjectId = model.SubjectId,
+            IsActive = true,
             CreatedBy = userId,
             ModifiedBy = userId,
             ModifiedOn = DateTime.Now,

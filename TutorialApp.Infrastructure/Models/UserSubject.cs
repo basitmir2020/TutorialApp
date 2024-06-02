@@ -28,5 +28,5 @@ public class UserSubject
     [Required]
     public DateTime ModifiedOn { get; set; }
 
-    public virtual UserExamType UserExamType { get; set; }
+    public virtual UserExamType? UserExamType { get; set; }
 }
