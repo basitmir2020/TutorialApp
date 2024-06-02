@@ -67,7 +67,7 @@ public class UserExamSubjects : IUserExamSubjects
             };
         }
 
-        var userSubject = await _tutorialAppContext.UserSubjects
+        var userSubject = await _tutorialAppContext.UserSubject
             .Where(x => x.IsActive && x.UserExamTypeId == examType.Id)
             .FirstOrDefaultAsync(cancellationToken: token);
         if (userSubject != null)

@@ -45,7 +45,7 @@ public class UserExamSubjectsController : ControllerBase
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPost]
-    [Route("SaveUserExamSubjectsAsync")]
+    [Route("SaveUserExamSubjects")]
     public async Task<IActionResult> SaveUserExamSubjects([FromBody]SaveUserExamSubjectDto model,CancellationToken token)
     {
         var userId = User.FindFirstValue("Id");
