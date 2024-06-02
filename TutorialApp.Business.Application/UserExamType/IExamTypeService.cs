@@ -1,6 +1,6 @@
 ﻿using TutorialApp.Business.Common.ViewModel;
 
-namespace TutorialApp.Business.Application.ExamType;
+namespace TutorialApp.Business.Application.UserExamType;
 
 public interface IExamTypeService
 {

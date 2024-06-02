@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TutorialApp.Business.Common.Validators;
 
-namespace TutorialApp.Business.Application.ExamType;
+namespace TutorialApp.Business.Application.UserExamType;
 
 public class UserExamTypeDto
 {

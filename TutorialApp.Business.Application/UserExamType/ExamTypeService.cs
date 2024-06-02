@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using TutorialApp.Business.Common.ViewModel;
 using TutorialApp.Infrastructure.DB;
 using TutorialApp.Infrastructure.Identity;
-using TutorialApp.Infrastructure.Models;
 
-namespace TutorialApp.Business.Application.ExamType;
+namespace TutorialApp.Business.Application.UserExamType;
 
 public class ExamTypeService : IExamTypeService
 {
@@ -42,18 +41,17 @@ public class ExamTypeService : IExamTypeService
         }
 
         var userExamType = await _tutorialAppContext.UserExamTypes
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.ExamTypeId == model.ExamTypeId && x.IsActive, token);
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive, token);
         if (userExamType != null)
         {
-            return new ResponseViewModel
-            {
-                StatusCode = 400,
-                Success = false,
-                Message = "User Already Added To This Exam Type!"
-            };
+            userExamType.ModifiedOn = DateTime.Now;
+            userExamType.ModifiedBy = userId;
+            userExamType.IsActive = false;
+            _tutorialAppContext.Update(userExamType);
+            await _tutorialAppContext.SaveChangesAsync(token);
         }
         
-        var response = new UserExamType
+        var response = new Infrastructure.Models.UserExamType
         {
             ExamTypeId = model.ExamTypeId,
             UserId = userId,

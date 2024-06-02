@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TutorialApp.Business.Application.ExamType;
+using TutorialApp.Business.Application.UserExamType;
 
 namespace TutorialApp.WebApi.Areas.Application.Controllers;
 
@@ -15,6 +15,7 @@ namespace TutorialApp.WebApi.Areas.Application.Controllers;
 public class ExamTypeController : ControllerBase
 {
     private readonly IExamTypeService _examTypeService;
+    
     /// <summary>
     /// 
     /// </summary>

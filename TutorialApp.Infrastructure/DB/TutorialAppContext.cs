@@ -32,6 +32,7 @@ public partial class TutorialAppContext : DbContext
     public virtual DbSet<QuestionOption> QuestionOptions { get; set; } = null!;
     public virtual DbSet<SubjectChapter> SubjectChapters { get; set; } = null!;
     public virtual DbSet<UserExamType> UserExamTypes { get; set; } = null!;
+    public virtual DbSet<UserSubject> UserSubjects { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
