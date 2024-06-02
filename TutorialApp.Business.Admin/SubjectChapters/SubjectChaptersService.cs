@@ -68,7 +68,7 @@ public class SubjectChaptersService : ISubjectChapters
             {
                 Id = subjectChapters.Id,
                 Sequence = subjectChapters.Sequence,
-                SubjectName = examSubject.SubjectName,
+                SubjectName = examSubject.SubjectName + " (" + _tutorialAppContext.ExamTypes.Where(x=>x.Id == examSubject.ExamTypeId).Select(x=>x.ExamType1).FirstOrDefault() +")",
                 ChapterName = subjectChapters.ChapterName,
                 Status = status.StatusName
             };
@@ -205,7 +205,7 @@ public class SubjectChaptersService : ISubjectChapters
 
     public async Task<ResponseViewModel> DeleteSubjectChaptersAsync(string userId, DeleteSubjectChapters model, CancellationToken token)
     {
-        var existExamType = await _tutorialAppContext.ExamTypes
+        var existExamType = await _tutorialAppContext.SubjectChapters
             .FirstOrDefaultAsync(x => x.Id == model.SubjectChapterId,token);
         if (existExamType == null)
         {

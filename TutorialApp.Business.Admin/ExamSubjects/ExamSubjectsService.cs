@@ -177,7 +177,7 @@ public class ExamSubjectsService : IExamSubjectsService
             select new ExamSubjectsVM
             {
                 Id = examSubject.Id,
-                SubjectName = examSubject.SubjectName + "(" + examTypes.ExamType1 + ")"
+                SubjectName = examSubject.SubjectName + " (" + examTypes.ExamType1 + ")"
             }).ToListAsync(cancellationToken: token);
         return new ResponseViewModelGeneric<List<ExamSubjectsVM>>(examSubjects)
         {
