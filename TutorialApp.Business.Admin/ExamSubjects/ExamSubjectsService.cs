@@ -172,11 +172,12 @@ public class ExamSubjectsService : IExamSubjectsService
     public async Task<ResponseViewModelGeneric<List<ExamSubjectsVM>>> SelectExamSubjectsAsync(CancellationToken token)
     {
         var examSubjects = await (from examSubject in _tutorialAppContext.ExamSubjects
+            join examTypes in _tutorialAppContext.ExamTypes on examSubject.ExamTypeId equals examTypes.Id 
             where examSubject.IsActive
             select new ExamSubjectsVM
             {
                 Id = examSubject.Id,
-                SubjectName = examSubject.SubjectName
+                SubjectName = examSubject.SubjectName + "(" + examTypes.ExamType1 + ")"
             }).ToListAsync(cancellationToken: token);
         return new ResponseViewModelGeneric<List<ExamSubjectsVM>>(examSubjects)
         {
